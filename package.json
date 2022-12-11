@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/sucredoux/express-mesto-gha/issues"
   },
-  "homepage": "https://github.com/sucredoux/express-mesto-gha#readme"
+  "homepage": "https://github.com/sucredoux/express-mesto-gha#readme",
+  "dependencies": {
+    "mongoose": "^6.8.0"
+  }
 }

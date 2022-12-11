@@ -1,16 +1,9 @@
 const express = require('express');
 const userRoutes = require('./users');
+const cardRoutes = require('./cards');
 const routes = express.Router();
 
-routes.use('/users', userRoutes)
-
-routes.get('/', (req, res) => {
-    res.send('Hello, world!')
-})
-
-routes.post('/', express.json(), (req, res) => {
-    res.send(req.body);
-})
-
+routes.use('/users', userRoutes);
+routes.use('/cards', cardRoutes);
 
 module.exports = routes ;
