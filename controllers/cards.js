@@ -6,7 +6,7 @@ const {
   SERVER_ERROR,
   OK,
   CREATED,
-} = require("../errors");
+} = require("../constants/errors");
 
 const getCards = (req, res) => {
   Card.find({})
