@@ -1,16 +1,17 @@
-const express = require("express");
-const path = require("path");
-const routes = require("./routes/index");
-const mongoose = require("mongoose");
+/* eslint-disable no-console */
+const express = require('express');
+const mongoose = require('mongoose');
+const routes = require('./routes/index');
 
 const { PORT = 3000 } = process.env;
-console.log(process.env);
 
 const app = express();
 
+mongoose.set('strictQuery', true);
+
 app.use((req, res, next) => {
   req.user = {
-    _id: "6394a3d824730f09fa329cc8",
+    _id: '63979e4754ca05f806df21fb',
   };
   next();
 });
@@ -18,8 +19,8 @@ app.use((req, res, next) => {
 app.use(routes);
 
 async function connect() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/mestodb");
-  console.log("Server connect db");
+  await mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
+  console.log('Server connect db');
   await app.listen(PORT);
   console.log(`App listening on port ${PORT}`);
 }
