@@ -39,10 +39,7 @@ const getUserById = (req, res) => {
         res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
       } else {
         res.status(OK).send({
-          user
-         /* name: req.body.name,
-          about: req.body.about,
-          avatar: req.body.avatar,*/
+          user,
         });
       }
     })
