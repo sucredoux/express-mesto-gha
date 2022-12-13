@@ -13,17 +13,14 @@ const getCards = (req, res) => {
     .populate(['owner', 'likes'])
     .then((cards) => res.status(OK).send(cards))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
         res
-          .status(BAD_REQUEST)
-          .send({ message: 'Переданы некорректные данные' });
-      } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        .status(SERVER_ERROR)
+        .send({ message: 'Ошибка сервера' });
         console.log(
           `При выполнении кода произошла ошибка ${err.name} c текстом ${err.message}. Смотри стэк: ${err.stack} `,
         );
       }
-    });
+    );
 };
 
 const deleteCardById = (req, res) => {
@@ -32,13 +29,7 @@ const deleteCardById = (req, res) => {
       if (!card) {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       } else {
-        res.status(OK).send({
-          likes: card.likes,
-          link: card.link,
-          name: card.name,
-          owner: card.owner,
-          _id: card._id,
-        });
+        res.status(OK).send(card);
       }
     })
     .catch((err) => {
@@ -88,14 +79,15 @@ const setLike = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
+      } else {
+        res.status(OK).send({
+          likes: card.likes,
+          link: card.link,
+          name: card.name,
+          owner: card.owner,
+          _id: card._id,
+        });
       }
-      res.status(OK).send({
-        likes: card.likes,
-        link: card.link,
-        name: card.name,
-        owner: card.owner,
-        _id: card._id,
-      });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -120,15 +112,19 @@ const deleteLike = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
+        res
+        .status(NOT_FOUND)
+        .send({ message: 'Карточка не найдена' });
+      } else {
+        res.status(OK).send({
+          likes: card.likes,
+          link: card.link,
+          name: card.name,
+          owner: card.owner,
+          _id: card._id,
+        });
       }
-      res.status(OK).send({
-        likes: card.likes,
-        link: card.link,
-        name: card.name,
-        owner: card.owner,
-        _id: card._id,
-      });
+
     })
     .catch((err) => {
       if (err.name === 'CastError') {

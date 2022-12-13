@@ -11,11 +11,7 @@ const {
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => {
-      res.status(OK).send(users.map((user) => ({
-        name: user.name,
-        about: user.about,
-        avatar: user.avatar,
-      })));
+      res.status(OK).send(users);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -23,7 +19,9 @@ const getUsers = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        res
+        .status(SERVER_ERROR)
+        .send({ message: 'Ошибка сервера' });
         console.log(
           `При выполнении кода произошла ошибка ${err.name} c текстом ${err.message}. Смотри стэк: ${err.stack} `,
         );
@@ -77,7 +75,9 @@ const createUser = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        res
+        .status(SERVER_ERROR)
+        .send({ message: 'Ошибка сервера' });
         console.log(
           `При выполнении кода произошла ошибка ${err.name} c текстом ${err.message}. Смотри стэк: ${err.stack} `,
         );
@@ -93,9 +93,13 @@ const updateUser = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        res.status(NOT_FOUND).send({ message: 'Пользователь не найден' });
+        res
+        .status(NOT_FOUND)
+        .send({ message: 'Пользователь не найден' });
       } else {
-        res.status(OK).send({
+        res
+        .status(OK)
+        .send({
           name: user.name,
           about: user.about,
           avatar: user.avatar,
@@ -117,7 +121,7 @@ const updateUser = (req, res) => {
 };
 
 const updateAvatar = (req, res) => {
-  User.findOneAndUpdate(
+  User.findByIdAndUpdate(
     req.user.id,
     {
       avatar:
@@ -127,7 +131,9 @@ const updateAvatar = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        res.status(NOT_FOUND).send({ message: 'Пользователь не найден' });
+        res
+        .status(NOT_FOUND)
+        .send({ message: 'Пользователь не найден' });
       } else {
         res.status(OK).send({
           name: user.name,
