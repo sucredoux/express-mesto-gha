@@ -20,8 +20,8 @@ const getUsers = (req, res) => {
           .send({ message: 'Переданы некорректные данные' });
       } else {
         res
-        .status(SERVER_ERROR)
-        .send({ message: 'Ошибка сервера' });
+          .status(SERVER_ERROR)
+          .send({ message: 'Ошибка сервера' });
         console.log(
           `При выполнении кода произошла ошибка ${err.name} c текстом ${err.message}. Смотри стэк: ${err.stack} `,
         );
@@ -76,8 +76,8 @@ const createUser = (req, res) => {
           .send({ message: 'Переданы некорректные данные' });
       } else {
         res
-        .status(SERVER_ERROR)
-        .send({ message: 'Ошибка сервера' });
+          .status(SERVER_ERROR)
+          .send({ message: 'Ошибка сервера' });
         console.log(
           `При выполнении кода произошла ошибка ${err.name} c текстом ${err.message}. Смотри стэк: ${err.stack} `,
         );
@@ -94,16 +94,16 @@ const updateUser = (req, res) => {
     .then((user) => {
       if (!user) {
         res
-        .status(NOT_FOUND)
-        .send({ message: 'Пользователь не найден' });
+          .status(NOT_FOUND)
+          .send({ message: 'Пользователь не найден' });
       } else {
         res
-        .status(OK)
-        .send({
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-        });
+          .status(OK)
+          .send({
+            name: user.name,
+            about: user.about,
+            avatar: user.avatar,
+          });
       }
     })
     .catch((err) => {
@@ -122,18 +122,15 @@ const updateUser = (req, res) => {
 
 const updateAvatar = (req, res) => {
   User.findByIdAndUpdate(
-    req.user.id,
-    {
-      avatar:
-        req.body.avatar,
-    },
+    req.user._id,
+    { avatar: req.body.avatar },
     { new: true, runValidators: true },
   )
     .then((user) => {
       if (!user) {
         res
-        .status(NOT_FOUND)
-        .send({ message: 'Пользователь не найден' });
+          .status(NOT_FOUND)
+          .send({ message: 'Пользователь не найден' });
       } else {
         res.status(OK).send({
           name: user.name,

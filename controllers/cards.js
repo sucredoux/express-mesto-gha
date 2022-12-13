@@ -13,14 +13,13 @@ const getCards = (req, res) => {
     .populate(['owner', 'likes'])
     .then((cards) => res.status(OK).send(cards))
     .catch((err) => {
-        res
+      res
         .status(SERVER_ERROR)
         .send({ message: 'Ошибка сервера' });
-        console.log(
-          `При выполнении кода произошла ошибка ${err.name} c текстом ${err.message}. Смотри стэк: ${err.stack} `,
-        );
-      }
-    );
+      console.log(
+        `При выполнении кода произошла ошибка ${err.name} c текстом ${err.message}. Смотри стэк: ${err.stack} `,
+      );
+    });
 };
 
 const deleteCardById = (req, res) => {
@@ -113,8 +112,8 @@ const deleteLike = (req, res) => {
     .then((card) => {
       if (!card) {
         res
-        .status(NOT_FOUND)
-        .send({ message: 'Карточка не найдена' });
+          .status(NOT_FOUND)
+          .send({ message: 'Карточка не найдена' });
       } else {
         res.status(OK).send({
           likes: card.likes,
@@ -124,7 +123,6 @@ const deleteLike = (req, res) => {
           _id: card._id,
         });
       }
-
     })
     .catch((err) => {
       if (err.name === 'CastError') {
