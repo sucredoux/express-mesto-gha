@@ -7,10 +7,7 @@ const {
   updateAvatar,
 } = require('../controllers/users');
 const { auth } = require('../middlewares/auth');
-<<<<<<< HEAD
 const { celebrate, Joi } = require('celebrate');
-=======
->>>>>>> feature/authorize
 
 const userRoutes = express.Router();
 
