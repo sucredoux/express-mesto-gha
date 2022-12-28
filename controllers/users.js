@@ -2,7 +2,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { generateToken } = require('../utils/jwt');
+const generateToken = require('../utils/jwt');
 const { auth } = require('../middlewares/auth');
 
 const {
@@ -14,7 +14,7 @@ const {
   AUTH,
   DUPLICATE_USER,
   MONGO_DUPLICATE,
-} = require('../constants/errors');
+} = require('../constants/status');
 const {
   BadRequestErr, MongoDuplicateErr, AuthErr, NotFoundErr,
 } = require('../errors');
@@ -56,34 +56,38 @@ const login = async (req, res, next) => {
   try {
     if (!email || !password) {
       throw new AuthErr(AuthErr.message);
-    /* return res.status(AUTH).send({ message: 'Неправильный email или password' }); */
     }
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
       throw new AuthErr(AuthErr.message);
-      /* return res.status(AUTH).send({ message: 'Неправильный email или password' }); */
     }
     const matched = await bcrypt.compare(password, user.password);
     if (!matched) {
       throw new AuthErr(AuthErr.message);
-      /* return res.status(AUTH).send({ message: 'Неправильный email или password' }); */
     }
+
     const token = jwt.sign({ _id: user._id, email: user.email }, NODE_ENV === 'production' ? JWT_SECRET_KEY : 'dev_secret', { expiresIn: '7d' });
 
     /* const token = generateToken({ _id: user._id, email: user.email }); */
-    /* res.cookie('token', token, {
+
+
+    res.cookie('token', token, {
       maxAge: 3600000 * 24 * 7,
       sameSite: true,
       httpOnly: true,
-    }).end(); */
+    }).status(OK).send({ message: 'Аутентификация пройдена', token });
 
-    return res.status(200).send({ message: 'Аутентификация пройдена', token });
+
+    /*return res.status(200).send({ message: 'Аутентификация пройдена', token });*/
+
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequestErr('Переданы некорректные данные'));
     }
     if (err.name === 'MongoServerError') {
       next(new MongoDuplicateErr(err.message));
+    } else {
+      next(err);
     }
     /* if (error.name === 'ValidationError') {
       res
@@ -93,7 +97,7 @@ const login = async (req, res, next) => {
     if (error.code === MONGO_DUPLICATE) {
       res.status(DUPLICATE_USER).send({ message: 'Такой пользователь уже существует' });
     } */
-    next(err);
+
     /* return res.status(500).send({ message: 'failed to register' });
 
     console.log(
@@ -199,8 +203,9 @@ const getUserById = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new BadRequestErr('Невалидный id'));
+    } else {
+      next(err);
     }
-    next(err);
   }
 };
 
@@ -236,7 +241,6 @@ const getUserById = (req, res) => {
 const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
-    console.log(req.user._id);
     if (!req.user._id) {
       throw new NotFoundErr('Пользователь не найден');
     }
@@ -248,11 +252,12 @@ const getUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-    const user = User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
       req.user._id,
       { name: req.body.name, about: req.body.about },
       { new: true, runValidators: true },
     );
+
     if (!user) {
       throw new NotFoundErr('Пользователь не найден');
     }
@@ -266,8 +271,9 @@ const updateUser = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequestErr('Переданы некорректные данные'));
+    } else {
+      next(err);
     }
-    next(err);
   }
 };
   /*
@@ -305,14 +311,14 @@ const updateUser = async (req, res, next) => {
     });
 }; */
 
-const updateAvatar = (req, res, next) => {
+const updateAvatar = async (req, res, next) => {
   try {
-    const newUser = User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
       req.user._id,
       { avatar: req.body.avatar },
       { new: true, runValidators: true },
     );
-    if (!newUser) {
+    if (!user) {
       throw new NotFoundErr('Пользователь не найден');
     } else {
       res.status(OK).send({
@@ -324,8 +330,9 @@ const updateAvatar = (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequestErr('Переданы некорректные данные'));
+    } else {
+      next(err);
     }
-    next(err);
   }
 };
   /*

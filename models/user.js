@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const express = require('express');
+
 const {
-  BAD_REQUEST, NOT_FOUND, SERVER_ERROR, OK, CREATED, AUTH,
-} = require('../constants/errors');
+  SERVER_ERROR,
+} = require('../constants/status');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -23,17 +23,11 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: false,
-    default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
-  },
-  email: {
-    type: String,
-    required: false,
-    default: 'Исследователь',
-  },
-  avatar: {
-    type: String,
-    required: false,
-
+    validate: {
+      validator(v) {
+        return /http(s?):\/\/(w{,3}\.)?(\w\W\.)*\w{2,3}(\/\w\W)*#?/.test(v);
+      },
+    },
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
   },
   email: {
@@ -49,7 +43,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.statics.findUserByCredentials = function(email, password) {
+userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email })
     .then((user) => {
       if (!user) {
@@ -74,18 +68,18 @@ userSchema.statics.findUserByCredentials = function(email, password) {
 };
 
 /*
-userSchema.statics.findUserByCredentials = async function(req, res) {
+userSchema.statics.findUserByCredentials = async function (email, password) {
 
   try {
     const user = await this.findOne({ email });
     if (!user) {
-      return res.status(AUTH).send({ message: 'Неправильный email или password' });
+      return new AuthErr('Неправильный email или password');
     }
     const matched = await bcrypt.compare(password, user.password);
     if (!matched) {
-      return res.status(AUTH).send({ message: 'Неправильный email или password' });
+      return new AuthErr('Неправильный email или password');
     }
-  } catch {
+  } catch(err) {
 
   }
 } */

@@ -3,10 +3,8 @@ const { errors } = require('celebrate');
 const userRoutes = require('./users');
 const cardRoutes = require('./cards');
 const authRoutes = require('./auth');
-const { NOT_FOUND } = require('../constants/errors');
-const { auth } = require('../middlewares/auth');
-
-const { auth } = require('../middlewares/auth');
+const { NOT_FOUND } = require('../constants/status');
+const auth = require('../middlewares/auth');
 
 const routes = express.Router();
 

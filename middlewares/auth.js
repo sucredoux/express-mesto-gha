@@ -1,30 +1,39 @@
-const express = require('express');
 const jwt = require('jsonwebtoken');
-const { AUTH } = require('../constants/errors');
+const { AuthErr } = require('../errors');
 
 const { JWT_SECRET_KEY, NODE_ENV } = process.env;
 
-
 const auth = (req, res, next) => {
+  /*
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith('Bearer')) {
-    return res.status(AUTH).send({ message: 'Необходима авторизация' });
+    throw new AuthErr(AuthErr.message);
   }
-  const token = authorization.replace('Bearer ', '');
+
+ const token = authorization.replace('Bearer ', ''); */
   let payload;
+
+  const { cookie } = req.headers;
   try {
+    if (!cookie || !cookie.startsWith('token=')) {
+      throw new AuthErr(AuthErr.message);
+    }
+    const token = cookie.replace('token=', '');
+    console.log(token);
+
+    if (!token) {
+      throw new AuthErr(AuthErr.message);
+    }
+
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET_KEY : 'dev_secret');
   } catch (err) {
-    console.log(err.name);
-  /*  if(err.name === 'JsonWebTokenError') {
-      return res.status(403).send({ message: 'Нет доступа' });
-    } */
-    return res.status(AUTH).send({ message: 'Необходима авторизация' });
+    if (err.name === 'JsonWebTokenError') {
+      throw new AuthErr(AuthErr.message);
+    } else {
+      next(err);
+    }
   }
 
   req.user = payload;
-
-console.log(req.user);
-  next();
 };
-module.exports = { auth };
+module.exports = auth;

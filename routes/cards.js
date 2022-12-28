@@ -2,7 +2,6 @@ const express = require('express');
 const {
   getCards, deleteCardById, createCard, setLike, deleteLike,
 } = require('../controllers/cards');
-const { auth } = require('../middlewares/auth');
 
 const cardRoutes = express.Router();
 
