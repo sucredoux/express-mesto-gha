@@ -53,7 +53,9 @@ const login = async (req, res, next) => {
 };
 
 const createUser = async (req, res, next) => {
-  const { email, password, name, about, avatar } = req.body;
+  const {
+    email, password, name, about, avatar,
+  } = req.body;
   try {
     if (!email || !password) {
       throw new BadRequestErr('Не передан email или password');
@@ -61,7 +63,9 @@ const createUser = async (req, res, next) => {
 
     const hash = await bcrypt.hash(password, SALT_ROUNDS);
 
-    const newUser = await User.create({ email, password: hash, name, about, avatar });
+    const newUser = await User.create({
+      email, password: hash, name, about, avatar,
+    });
     if (newUser) {
       return res.status(CREATED).send({
         name: newUser.name,
