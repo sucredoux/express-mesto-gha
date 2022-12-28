@@ -18,7 +18,7 @@ const getCards = async (req, res, next) => {
 
 const deleteCardById = async (req, res, next) => {
   try {
-    const myCard = await Card.findById({ _id: req.params.cardId });
+    const myCard = await Card.findById({ _id: req.params.cardId }, { runValidators: true });
     if (!myCard) {
       throw new NotFoundErr('Запрашиваемая карта не найдена');
     }
