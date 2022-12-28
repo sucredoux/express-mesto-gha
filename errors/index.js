@@ -3,6 +3,7 @@ const NotFoundErr = require('./NotFoundErr');
 const BadRequestErr = require('./BadRequestErr');
 const MongoDuplicateErr = require('./MongoDuplicateErr');
 const ForbiddenErr = require('./ForbiddenErr');
+const LoginErr = require('./LoginErr');
 
 module.exports = {
   AuthErr,
@@ -10,4 +11,5 @@ module.exports = {
   BadRequestErr,
   MongoDuplicateErr,
   ForbiddenErr,
+  LoginErr,
 };
