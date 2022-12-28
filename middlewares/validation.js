@@ -57,6 +57,9 @@ const validateUserInfo = celebrate({
       }
       return helpers.message('Невалидная ссылка');
     }),
+    _id: Joi.string().alphanum().length(24).messages({
+      'any.messages': 'Невалидный id',
+    }),
   },
 });
 
@@ -78,6 +81,9 @@ const validateCardInfo = celebrate({
       return helpers.message('Невалидная ссылка');
     }).messages({
       'any.required': 'Обязательное поле',
+    }),
+    _id: Joi.string().alphanum().length(24).messages({
+      'any.messages': 'Невалидный id',
     }),
   },
 });
