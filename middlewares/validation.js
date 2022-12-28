@@ -40,6 +40,11 @@ const validateUserInfo = celebrate({
   headers: Joi.object().keys({
     authorization: Joi.string().required(),
   }).unknown(true),
+  params: Joi.object().keys({
+    _id: Joi.string().alphanum().length(24).messages({
+      'any.messages': 'Невалидный id',
+    }),
+  }).unknown(true),
   body: {
     name: Joi.string().min(2).max(30)
       .messages({
@@ -57,15 +62,17 @@ const validateUserInfo = celebrate({
       }
       return helpers.message('Невалидная ссылка');
     }),
-    _id: Joi.string().alphanum().length(24).messages({
-      'any.messages': 'Невалидный id',
-    }),
   },
 });
 
 const validateCardInfo = celebrate({
   headers: Joi.object().keys({
     authorization: Joi.string().required(),
+  }).unknown(true),
+  params: Joi.object().keys({
+    _id: Joi.string().alphanum().length(24).messages({
+      'any.messages': 'Невалидный id',
+    }),
   }).unknown(true),
   body: {
     name: Joi.string().min(2).max(30).required()
@@ -81,9 +88,6 @@ const validateCardInfo = celebrate({
       return helpers.message('Невалидная ссылка');
     }).messages({
       'any.required': 'Обязательное поле',
-    }),
-    _id: Joi.string().alphanum().length(24).messages({
-      'any.messages': 'Невалидный id',
     }),
   },
 });
