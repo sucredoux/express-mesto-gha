@@ -29,7 +29,6 @@ const cardSchema = new mongoose.Schema({
 
 module.exports = mongoose.model('card', cardSchema);
 
-
 /*
 const initialCards = [
   {
@@ -42,19 +41,18 @@ const initialCards = [
   },
   {
     "name": "Антарктика",
-    "link": "https://images.unsplash.com/photo-1551415923-31d2072bc248?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDF8fGFudGFydGljYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'
+    "link": "https://images.unsplash.com/photo-1551415923-31d2072bc248?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDF8fGFudGFydGljYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
   },
   {
     "name": "Камчатка",
-    "link": "https://images.unsplash.com/photo-1612257460705-e0d24b7a4808?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8a2FtY2hhdGthfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
+    "link": "https://images.unsplash.com/photo-1612257460705-e0d24b7a4808?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8a2FtY2hhdGthfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
   },
   {
     name: 'Новая Зеландия',
-    link: 'https://images.unsplash.com/photo-1593384754621-c058e0fc093c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bmV3JTIwemVhbGFuZCUyMGJheXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'
+    link: 'https://images.unsplash.com/photo-1593384754621-c058e0fc093c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bmV3JTIwemVhbGFuZCUyMGJheXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
   },
   {
     name: 'Перу',
-    link: 'https://images.unsplash.com/photo-1533049060588-ef73e35d5f8b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fHBlcnUlMjBvY2VhbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'
+    link: 'https://images.unsplash.com/photo-1533049060588-ef73e35d5f8b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fHBlcnUlMjBvY2VhbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
   }
-];
-*/
+]; */

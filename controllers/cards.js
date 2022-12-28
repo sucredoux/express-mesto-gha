@@ -18,18 +18,14 @@ const getCards = async (req, res, next) => {
 
 const deleteCardById = async (req, res, next) => {
   try {
-    const card = await Card.findOneAndDelete(
-      {
-        _id: req.params.cardId, owner: req.user._id,
-      },
-      { runValidators: true },
-    );
-    if (!card) {
+    const myCard = await Card.findById({ _id: req.params.cardId });
+    if (!myCard) {
       throw new NotFoundErr('Запрашиваемая карта не найдена');
     }
-    if (!card.owner._id.equals(req.user._id)) {
+    if (!myCard.owner._id.equals(req.user._id)) {
       throw new ForbiddenErr('У Вас нет доступа');
     } else {
+      const card = await Card.findOneAndDelete({ _id: req.params.cardId }, { runValidators: true });
       return res.status(OK).send(card);
     }
   } catch (err) {
@@ -56,8 +52,7 @@ const createCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequestErr('Переданы некорректные данные'));
-    }
-    else {
+    } else {
       next(err);
     }
   }
@@ -91,20 +86,20 @@ const setLike = async (req, res, next) => {
 
 const deleteLike = async (req, res, next) => {
   try {
-    const cardDislike = await Card.findByIdAndUpdate(
+    const card = await Card.findByIdAndUpdate(
       req.params.cardId,
       { $pull: { likes: req.user._id } },
       { new: true },
     );
-    if (!cardDislike) {
+    if (!card) {
       throw new NotFoundErr('Запрашиваемая карта не найдена');
     }
     return res.status(OK).send({
-      likes: cardDislike.likes,
-      link: cardDislike.link,
-      name: cardDislike.name,
-      owner: cardDislike.owner,
-      _id: cardDislike._id,
+      likes: card.likes,
+      link: card.link,
+      name: card.name,
+      owner: card.owner,
+      _id: card._id,
     });
   } catch (err) {
     if (err.name === 'CastError') {
