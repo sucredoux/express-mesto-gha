@@ -41,11 +41,11 @@ const validateUserInfo = celebrate({
     authorization: Joi.string().required(),
   }).unknown(true),
   params: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24).messages({
+    id: Joi.string().alphanum().length(24).messages({
       'any.messages': 'Невалидный id',
     }),
   }).unknown(true),
-  body: {
+  body: Joi.object().keys({
     name: Joi.string().min(2).max(30)
       .messages({
         'string.min': 'Минимальная длина поля 2 символа',
@@ -62,14 +62,19 @@ const validateUserInfo = celebrate({
       }
       return helpers.message('Невалидная ссылка');
     }),
-  },
+  }).unknown(true),
 });
 
 const validateCardInfo = celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().alphanum().length(24).messages({
+      'any.messages': 'Невалидный id',
+    }),
+  }).unknown(true),
   headers: Joi.object().keys({
     authorization: Joi.string().required(),
   }).unknown(true),
-  body: {
+  body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required()
       .messages({
         'string.min': 'Минимальная длина поля 2 символа',
@@ -84,12 +89,20 @@ const validateCardInfo = celebrate({
     }).messages({
       'any.required': 'Обязательное поле',
     }),
-  },
+  }).unknown(true),
 });
 
-const validateId = celebrate({
+const validateUserId = celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24).messages({
+    id: Joi.string().alphanum().length(24).messages({
+      'any.messages': 'Невалидный id',
+    }),
+  }).unknown(true),
+});
+
+const validateCardId = celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().alphanum().length(24).messages({
       'any.messages': 'Невалидный id',
     }),
   }).unknown(true),
@@ -99,5 +112,6 @@ module.exports = {
   validateAuthBody,
   validateUserInfo,
   validateCardInfo,
-  validateId,
+  validateUserId,
+  validateCardId,
 };

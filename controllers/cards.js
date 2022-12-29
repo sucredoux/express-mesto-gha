@@ -18,15 +18,17 @@ const getCards = async (req, res, next) => {
 
 const deleteCardById = async (req, res, next) => {
   try {
-    const myCard = await Card.findById({ _id: req.params.cardId }, { runValidators: true });
-    if (!myCard) {
+    const card = await Card.findById(req.params.cardId);
+
+    if (!card) {
       throw new NotFoundErr('Запрашиваемая карта не найдена');
     }
-    if (!myCard.owner._id.equals(req.user._id)) {
+
+    if (!card.owner._id.equals(req.user._id)) {
       throw new ForbiddenErr('У Вас нет доступа');
     } else {
-      const card = await Card.findOneAndDelete({ _id: req.params.cardId }, { runValidators: true });
-      return res.status(OK).send(card);
+      const cardToDelete = await Card.findOneAndDelete(req.params.cardId, { runValidators: true });
+      return res.status(OK).send(cardToDelete);
     }
   } catch (err) {
     if (err.name === 'CastError') {
@@ -63,7 +65,7 @@ const setLike = async (req, res, next) => {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
       { $addToSet: { likes: req.user._id } },
-      { new: true },
+      { new: true, runValidators: true },
     );
     if (!card) {
       throw new NotFoundErr('Запрашиваемая карта не найдена');
@@ -89,7 +91,7 @@ const deleteLike = async (req, res, next) => {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
       { $pull: { likes: req.user._id } },
-      { new: true },
+      { new: true, runValidators: true },
     );
     if (!card) {
       throw new NotFoundErr('Запрашиваемая карта не найдена');

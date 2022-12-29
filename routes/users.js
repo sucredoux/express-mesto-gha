@@ -14,6 +14,6 @@ userRoutes.get('/', getUsers);
 userRoutes.get('/me', validateUserInfo, getUser);
 userRoutes.patch('/me', validateUserInfo, updateUser);
 userRoutes.patch('/me/avatar', validateUserInfo, updateAvatar);
-userRoutes.get('/:id', getUserById);
+userRoutes.get('/:id', validateUserInfo, getUserById);
 
 module.exports = userRoutes;

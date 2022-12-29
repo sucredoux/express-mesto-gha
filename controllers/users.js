@@ -99,9 +99,8 @@ const getUsers = async (req, res, next) => {
 };
 
 const getUserById = async (req, res, next) => {
-  const { id } = req.params;
   try {
-    const userById = await User.findById(id);
+    const userById = await User.findById(req.params.id);
     if (!userById) {
       throw new NotFoundErr('Запрашиваемый пользователь не найден');
     } else {

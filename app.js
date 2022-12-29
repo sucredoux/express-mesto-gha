@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const routes = require('./routes/index');
 const errorHandler = require('./middlewares/err-handler');
@@ -11,6 +12,7 @@ const { PORT, MONGO_URL } = process.env;
 
 const app = express();
 app.use(cookieParser());
+app.use(bodyParser.json());
 
 mongoose.set('strictQuery', true);
 app.use(cors());
