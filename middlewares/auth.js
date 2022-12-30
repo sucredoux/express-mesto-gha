@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { AuthErr } = require('../errors');
 
-const { NODE_ENV, JWT_SECRET_KEY } = process.env;
+const { NODE_ENV = 'production', JWT_SECRET_KEY = 'h6RRM09zlXTRSOhZ5SHbrva' } = process.env;
 
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
