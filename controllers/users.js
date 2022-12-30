@@ -71,7 +71,7 @@ const getUsers = async (req, res, next) => {
     const users = await User.find({});
     return res.status(OK).send(users);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -141,7 +141,7 @@ const updateAvatar = async (req, res, next) => {
     if (!user) {
       throw new NotFoundErr('Пользователь не найден');
     } else {
-      res.status(OK).send({
+      return res.status(OK).send({
         name: user.name,
         about: user.about,
         avatar: user.avatar,
