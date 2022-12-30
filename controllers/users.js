@@ -9,7 +9,7 @@ const {
   CREATED,
 } = require('../constants/status');
 const {
-  BadRequestErr, MongoDuplicateErr, NotFoundErr, LoginErr,
+  BadRequestErr, MongoDuplicateErr, NotFoundErr, AuthErr,
 } = require('../errors');
 
 const { NODE_ENV, JWT_SECRET_KEY } = process.env;
@@ -19,36 +19,20 @@ const SALT_ROUNDS = 10;
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    if (!email || !password) {
-      throw new LoginErr(LoginErr.message);
-    }
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
-      throw new LoginErr(LoginErr.message);
+      throw new AuthErr('Неправильный email или пароль');
     }
     const matched = await bcrypt.compare(password, user.password);
     if (!matched) {
-      throw new LoginErr(LoginErr.message);
+      throw new AuthErr('Неправильный email или пароль');
     }
 
     const token = jwt.sign({ _id: user._id, email: user.email }, NODE_ENV === 'production' ? JWT_SECRET_KEY : 'dev_secret', { expiresIn: '7d' });
 
-    /* const token = generateToken({ _id: user._id, email: user.email }); */
-
-    res.cookie('token', token, {
-      maxAge: 3600000 * 24 * 7,
-      sameSite: true,
-      httpOnly: true,
-    }).status(OK).send({ message: 'Аутентификация пройдена', token });
+    return res.status(OK).send({ message: 'Аутентификация пройдена', token });
   } catch (err) {
-    if (err.name === 'ValidationError') {
-      next(new BadRequestErr('Переданы некорректные данные'));
-    }
-    if (err.name === 'MongoServerError') {
-      next(new MongoDuplicateErr(err.message));
-    } else {
-      next(err);
-    }
+    next(err);
   }
 };
 
@@ -57,10 +41,6 @@ const createUser = async (req, res, next) => {
     email, password, name, about, avatar,
   } = req.body;
   try {
-    if (!email || !password) {
-      throw new BadRequestErr('Не передан email или password');
-    }
-
     const hash = await bcrypt.hash(password, SALT_ROUNDS);
 
     const newUser = await User.create({
@@ -81,8 +61,9 @@ const createUser = async (req, res, next) => {
     }
     if (err.name === 'MongoServerError') {
       next(new MongoDuplicateErr(err.message));
+    } else {
+      next(err);
     }
-    next(err);
   }
 };
 
@@ -91,9 +72,6 @@ const getUsers = async (req, res, next) => {
     const users = await User.find({});
     return res.status(OK).send(users);
   } catch (err) {
-    if (err.name === 'ValidationError') {
-      next(new BadRequestErr('Переданы некорректные данные'));
-    }
     next(err);
   }
 };

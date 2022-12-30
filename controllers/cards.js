@@ -22,12 +22,10 @@ const deleteCardById = async (req, res, next) => {
 
     if (!card) {
       throw new NotFoundErr('Запрашиваемая карта не найдена');
-    }
-
-    if (!card.owner._id.equals(req.user._id)) {
+    } else if (!card.owner._id.equals(req.user._id)) {
       throw new ForbiddenErr('У Вас нет доступа');
     } else {
-      const cardToDelete = await Card.findOneAndDelete(req.params.cardId, { runValidators: true });
+      const cardToDelete = await Card.findByIdAndDelete(req.params.cardId, { runValidators: true });
       return res.status(OK).send(cardToDelete);
     }
   } catch (err) {

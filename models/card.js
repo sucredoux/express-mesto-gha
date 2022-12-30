@@ -10,6 +10,13 @@ const cardSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
+    validate: {
+
+      validator(v) {
+        return /http(s?):\/\/(w{,3}\.)?(\w\W\.)*\w{2,3}(\/\w\W)*#?/.test(v);
+      },
+
+    },
   },
   likes: {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],

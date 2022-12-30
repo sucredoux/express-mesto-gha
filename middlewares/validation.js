@@ -3,10 +3,8 @@ const validator = require('validator');
 
 const validateAuthBody = celebrate({
   body: {
-    password: Joi.string().min(8).max(30).required()
+    password: Joi.string().required()
       .messages({
-        'string.min': 'Минимальная длина поля 8 символов',
-        'string.max': 'Максимальная длина поля 30 символов',
         'any.required': 'Обязательное поле',
       }),
     email: Joi.string().required().custom((value, helpers) => {
@@ -37,14 +35,11 @@ const validateAuthBody = celebrate({
 });
 
 const validateUserInfo = celebrate({
-  headers: Joi.object().keys({
-    authorization: Joi.string().required(),
-  }).unknown(true),
   params: Joi.object().keys({
     id: Joi.string().alphanum().length(24).messages({
       'any.messages': 'Невалидный id',
     }),
-  }).unknown(true),
+  }),
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30)
       .messages({
@@ -62,7 +57,7 @@ const validateUserInfo = celebrate({
       }
       return helpers.message('Невалидная ссылка');
     }),
-  }).unknown(true),
+  }),
 });
 
 const validateCardInfo = celebrate({
@@ -70,10 +65,7 @@ const validateCardInfo = celebrate({
     cardId: Joi.string().alphanum().length(24).messages({
       'any.messages': 'Невалидный id',
     }),
-  }).unknown(true),
-  headers: Joi.object().keys({
-    authorization: Joi.string().required(),
-  }).unknown(true),
+  }),
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required()
       .messages({
@@ -89,7 +81,7 @@ const validateCardInfo = celebrate({
     }).messages({
       'any.required': 'Обязательное поле',
     }),
-  }).unknown(true),
+  }),
 });
 
 const validateUserId = celebrate({
@@ -97,7 +89,7 @@ const validateUserId = celebrate({
     id: Joi.string().alphanum().length(24).messages({
       'any.messages': 'Невалидный id',
     }),
-  }).unknown(true),
+  }),
 });
 
 const validateCardId = celebrate({
@@ -105,7 +97,7 @@ const validateCardId = celebrate({
     cardId: Joi.string().alphanum().length(24).messages({
       'any.messages': 'Невалидный id',
     }),
-  }).unknown(true),
+  }),
 });
 
 module.exports = {

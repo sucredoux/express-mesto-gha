@@ -5,6 +5,7 @@ require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const { errors } = require('celebrate');
 const routes = require('./routes/index');
 const errorHandler = require('./middlewares/err-handler');
 
@@ -21,6 +22,7 @@ app.use(express.json());
 
 app.use(routes);
 
+routes.use(errors());
 app.use(errorHandler);
 
 async function connect() {
